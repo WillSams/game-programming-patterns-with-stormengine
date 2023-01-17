@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BIN	= $(NAME)
-BIN_DIR   		= ./../bin
+BIN_DIR   		= ./../../bin
 TARGET 			= $(BIN_DIR)/$(BIN)
 TESTTARGET 		= $(BIN_DIR)/test-$(BIN)
 

@@ -1,3 +1,3 @@
 NAME = command_pattern_example
 
-include ../common.mk
+include ../../common.mk

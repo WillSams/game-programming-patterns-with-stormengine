@@ -2,4 +2,4 @@
 
 ## The Patterns
 
-* [Command](./command/README.md)
+* [Command](./patterns/command/README.md)
