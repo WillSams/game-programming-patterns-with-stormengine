@@ -1,2 +1,3 @@
+
 clean:
-	rm -f $(BIN_DIR)/* && rm -f $(shell find . -name "*.o")
+	rm -f bin/* && rm -f $(shell find . -name "*.o")

@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
   auto game = std::make_unique<Game>();
 
   std::cout << "game init attempt...\n";
-  if (game->init("Command Pattern Example", 100, 100, 640, 480, false)) {
+  if (game->init("Flyweight Pattern Example", 100, 100, 640, 480, false)) {
     std::cout << "game init success!\n";
     while (game->running()) {
       frameStart = SDL_GetTicks();

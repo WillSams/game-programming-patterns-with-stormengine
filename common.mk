@@ -11,8 +11,9 @@ INCLUDE = -isystem -I/usr/local/include
 CCFLAGS = -Wall -c -g -std=c++17 \
 	-Wno-reorder -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function  $(INCLUDE) 
 
-SRCS	= $(wildcard src/*.cpp)
-SRCS	+= main.cpp
+SRCS	= $(wildcard src/**/*.cpp)
+SRCS	+= $(wildcard src/*.cpp)
+SRCS	+= ./main.cpp
 OBJS 	= $(SRCS:.cpp=.o)
 
 all: clean  $(TARGET)
