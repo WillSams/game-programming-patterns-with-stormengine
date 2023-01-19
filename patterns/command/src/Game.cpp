@@ -2,8 +2,8 @@
 #include <memory>
 
 #include "Game.h"
-#include "Unit.h"
-#include "commands/MoveUnitCommand.h"
+#include "InputHandler.h"
+#include "commands/Command.h"
 
 Game::Game() : m_pWindow(), m_pRenderer(), m_Running(false) {}
 
@@ -55,23 +55,37 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
     return false; // SDL init fail
   }
 
+  // TODO
+  //  gameobjects init
+  //  player.init();, I.E., Player player(Sprite("player.png"));
+
   m_Running = true; // everything inited successfully, start the main loop
   return true;
 }
 
 void Game::render() {
   SDL_RenderClear(m_pRenderer);
+
+  // TODO
+  // gameobjects render
+  // player.render();
+
   SDL_RenderPresent(m_pRenderer);
 }
 
 void Game::update() {}
 
 void Game::handleEvents() {
-  Unit unit(0, 0);
-  std::unique_ptr<Command> moveCommand =
-      std::make_unique<MoveUnitCommand>(unit, 10, 20);
-  moveCommand->execute();
-  moveCommand->undo();
+  InputHandler input_handler;
+  while (true) {
+    auto cmd = input_handler.handleInput();
+    if (cmd != nullptr) {
+
+      // TODO
+      // gameobjects update
+      // player.update(command);
+    }
+  }
 }
 
 void Game::clean() {
