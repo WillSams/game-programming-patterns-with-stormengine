@@ -1,14 +1,22 @@
-#include <SDL2/SDL.h>
-#include <unordered_map>
-#include <vector>
+#pragma once
 
+#include <SDL2/SDL.h>
+
+#include <SDL2/SDL.h>
+#include <map>
+
+#include "Player.h"
 #include "commands/Command.h"
 
 class InputHandler {
 public:
   InputHandler();
-  Command *handleInput();
+  void handleInput(SDL_Event &event);
+  void bindKey(SDL_Keycode key, std::unique_ptr<Command> command);
+  Command *getLastCommand();
 
 private:
-  std::unordered_map<SDL_Scancode, Command *> m_key_map;
+  const Uint8 *m_keystates;
+  std::map<SDL_Keycode, std::unique_ptr<Command>> m_key_map;
+  Command *m_lastCommand;
 };

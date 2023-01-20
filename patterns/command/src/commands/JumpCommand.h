@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Command.h"
+#include "../Sprite.h"
+#include "MoveCommand.h"
 
-class JumpCommand : public Command {
+class JumpCommand : public MoveCommand {
 public:
-  void execute() override;
+  Direction getDirection() override;
 };

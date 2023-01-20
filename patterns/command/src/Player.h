@@ -1,7 +1,8 @@
+#pragma once
 
-#include "Sprite.h"
 #include "commands/Command.h"
 
+#include "Sprite.h"
 class Player {
 public:
   Player(Sprite sprite);

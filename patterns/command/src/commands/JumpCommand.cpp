@@ -1,5 +1,3 @@
 #include "JumpCommand.h"
 
-void JumpCommand::execute() {
-  // Handle jumping
-}
+Direction JumpCommand::getDirection() { return Direction::UP; }

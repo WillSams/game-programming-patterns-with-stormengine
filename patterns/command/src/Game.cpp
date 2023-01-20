@@ -3,9 +3,11 @@
 
 #include "Game.h"
 #include "InputHandler.h"
-#include "commands/Command.h"
+#include "Sprite.h"
 
-Game::Game() : m_pWindow(), m_pRenderer(), m_Running(false) {}
+Game::Game()
+    : m_pWindow(), m_pRenderer(), m_Running(false), m_pPlayer(nullptr),
+      m_pInputHandler(nullptr) {}
 
 Game::~Game() { clean(); }
 
@@ -41,7 +43,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
 
       if (m_pRenderer != 0) { // renderer init success
         std::cout << "renderer creation success\n";
-        SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(m_pRenderer, 0, 255, 0, 255);
       } else {
         std::cout << "renderer init fail\n";
         return false; // renderer init fail
@@ -55,9 +57,10 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
     return false; // SDL init fail
   }
 
-  // TODO
-  //  gameobjects init
-  //  player.init();, I.E., Player player(Sprite("player.png"));
+  auto playerSprite =
+      std::make_unique<Sprite>(*m_pRenderer, DATA_PREFIX "gfx/player.png");
+  m_pPlayer = std::make_unique<Player>(*playerSprite);
+  m_pInputHandler = std::make_unique<InputHandler>();
 
   m_Running = true; // everything inited successfully, start the main loop
   return true;
@@ -66,24 +69,19 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
 void Game::render() {
   SDL_RenderClear(m_pRenderer);
 
-  // TODO
-  // gameobjects render
-  // player.render();
+  m_pPlayer->render();
 
   SDL_RenderPresent(m_pRenderer);
 }
 
-void Game::update() {}
+void Game::update() { m_pPlayer->update(m_pInputHandler->getLastCommand()); }
 
 void Game::handleEvents() {
-  InputHandler input_handler;
-  while (true) {
-    auto cmd = input_handler.handleInput();
-    if (cmd != nullptr) {
-
-      // TODO
-      // gameobjects update
-      // player.update(command);
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    m_pInputHandler->handleInput(event);
+    if (event.type == SDL_QUIT) {
+      m_Running = false;
     }
   }
 }

@@ -7,7 +7,7 @@ enum Direction { LEFT, RIGHT, UP, DOWN };
 
 class Sprite {
 public:
-  Sprite(std::string filePath);
+  Sprite(SDL_Renderer &renderer, std::string filePath);
   ~Sprite();
 
   void draw();
@@ -16,4 +16,5 @@ public:
 private:
   SDL_Texture *m_texture;
   SDL_Rect m_rect;
+  SDL_Renderer &m_renderer;
 };

@@ -1,19 +1,14 @@
 #pragma once
 
+#include <SDL2/SDL.h>
+
 #include <iostream>
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include "InputHandler.h"
+#include "Player.h"
 
 class Game {
-private:
-  SDL_Window *m_pWindow;
-  SDL_Renderer *m_pRenderer;
-
-  bool m_Running;
-
-  int m_gameWidth;
-  int m_gameHeight;
 
 public:
   Game();
@@ -33,4 +28,15 @@ public:
   void update();
   void handleEvents();
   void clean();
+
+private:
+  SDL_Window *m_pWindow;
+  SDL_Renderer *m_pRenderer;
+  std::unique_ptr<Player> m_pPlayer;
+  std::unique_ptr<InputHandler> m_pInputHandler;
+
+  bool m_Running;
+
+  int m_gameWidth;
+  int m_gameHeight;
 };

@@ -1,6 +1,8 @@
 #pragma once
 
+#include "../Sprite.h"
+
 class Command {
 public:
-  virtual void execute() = 0;
+  virtual Direction getDirection() = 0;
 };
