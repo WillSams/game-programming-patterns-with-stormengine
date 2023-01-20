@@ -20,7 +20,7 @@ OBJS 	= $(SRCS:.cpp=.o)
 all: clean  $(TARGET)
 
 clean:
-	rm -f $(BIN_DIR)/* && rm -f $(shell find . -name "*.o")
+	rm -f $(BIN_DIR)/* && rm -f $(shell find . -name "*.o") && rm -f $(shell find . -name "valgrind.output")
 
 run:
 	$(TARGET)
@@ -34,8 +34,8 @@ $(TARGET) : $(OBJS)
 	mkdir -p $(BIN_DIR)
 	$(CC) $^ $(LIB) -o $@
 	
-memcheck:
-	valgrind --log-file=valgrind.output --leak-check=yes --tool=memcheck $(TARGET)
+memcheck: clean $(TARGET)
+	valgrind --log-file=valgrind.output  --tool=memcheck --leak-check=full --show-leak-kinds=all $(TARGET)
 
 TESTRCS  = $(wildcard specs/*.cpp)
 TESTRCS  += $(wildcard src/*.cpp)

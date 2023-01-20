@@ -6,6 +6,8 @@
 class Player {
 public:
   Player(Sprite sprite);
+  ~Player() = default;
+
   void render();
   void update(Command *command);
 

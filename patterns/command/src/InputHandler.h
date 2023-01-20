@@ -11,6 +11,7 @@
 class InputHandler {
 public:
   InputHandler();
+  ~InputHandler() = default;
   void handleInput(SDL_Event &event);
   void bindKey(SDL_Keycode key, std::unique_ptr<Command> command);
   Command *getLastCommand();

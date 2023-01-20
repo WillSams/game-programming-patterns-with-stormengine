@@ -4,5 +4,6 @@
 
 class Command {
 public:
+  ~Command() = default;
   virtual Direction getDirection() = 0;
 };

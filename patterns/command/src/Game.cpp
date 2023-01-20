@@ -57,8 +57,7 @@ bool Game::init(const char *title, int xpos, int ypos, int width, int height,
     return false; // SDL init fail
   }
 
-  auto playerSprite =
-      std::make_unique<Sprite>(*m_pRenderer, DATA_PREFIX "gfx/player.png");
+  Sprite *playerSprite = new Sprite(m_pRenderer, DATA_PREFIX "gfx/player.png");
   m_pPlayer = std::make_unique<Player>(*playerSprite);
   m_pInputHandler = std::make_unique<InputHandler>();
 

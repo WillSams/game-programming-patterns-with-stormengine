@@ -4,11 +4,11 @@
 
 #include "Sprite.h"
 
-Sprite::Sprite(SDL_Renderer &renderer, std::string filePath)
+Sprite::Sprite(SDL_Renderer *&renderer, std::string filePath)
     : m_rect({0, 0, 0, 0}), m_texture(nullptr), m_renderer(renderer) {
   // Load image into texture
   SDL_Surface *surface = IMG_Load(filePath.c_str());
-  m_texture = SDL_CreateTextureFromSurface(&renderer, surface);
+  m_texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
 
   // Set rect to the size of the image
@@ -17,7 +17,7 @@ Sprite::Sprite(SDL_Renderer &renderer, std::string filePath)
 
 Sprite::~Sprite() { SDL_DestroyTexture(m_texture); }
 
-void Sprite::draw() { SDL_RenderCopy(&m_renderer, m_texture, NULL, &m_rect); }
+void Sprite::draw() { SDL_RenderCopy(m_renderer, m_texture, NULL, &m_rect); }
 
 void Sprite::move(Direction direction) {
   switch (direction) {
