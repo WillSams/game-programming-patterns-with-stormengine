@@ -4,7 +4,7 @@ BIN	= $(NAME)
 BIN_DIR   		= ./../../bin
 TARGET 			= $(BIN_DIR)/$(BIN)
 TESTTARGET 		= $(BIN_DIR)/test-$(BIN)
-DATA_PREFIX   = $(PWD)/../../assets/
+DATA_PREFIX   	= $(PWD)/../../assets/
 
 CC = g++
 LIB = -L/usr/local/lib -Wl,-rpath=/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
