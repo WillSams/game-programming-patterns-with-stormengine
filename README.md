@@ -19,7 +19,7 @@ follow the book's structure.
 | [Flyweight](./patterns/design/flyweight/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/flyweight.html) |
 | [Observer](./patterns/design/observer/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/observer.html) |
 | [Prototype](./patterns/design/prototype/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/prototype.html) |
-| Singleton | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/singleton.html) |
+| [Singleton](./patterns/design/singleton/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/singleton.html) |
 | State | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/state.html) |
 
 ### Sequencing Patterns — `patterns/sequencing/`
