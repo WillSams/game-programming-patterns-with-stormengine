@@ -31,9 +31,15 @@ jobs:
           cmake ..
           sudo cmake --build . --target install
 
-      - name: Install Storm Engine v2 (latest release)
+      - name: Install Storm Engine v2 (latest release with a .deb)
         run: |
-          gh release download -R WillSams/storm-engine-v2 \
+          set -e
+          # The newest GitHub "latest" release may carry no assets, so resolve
+          # the most recent release that actually has an amd64 .deb.
+          TAG=$(gh api "repos/WillSams/storm-engine-v2/releases?per_page=30" \
+            --jq '[.[] | select(any(.assets[]; .name | endswith("amd64.deb")))][0].tag_name')
+          echo "Using Storm Engine release: ${TAG}"
+          gh release download "$TAG" -R WillSams/storm-engine-v2 \
             --pattern '*amd64.deb' --dir /tmp/engine
           sudo dpkg -i /tmp/engine/*amd64.deb || sudo apt-get -f install -y
           sudo ldconfig
