@@ -6,43 +6,39 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # Run inside the same image the engine .deb is built against: igloo is
+    # preinstalled, and the tinyxml2 / SDL sonames match the engine library
+    # (a bare ubuntu runner ships newer sonames and fails to link).
+    container: storminator16/igloo-testing:latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: Install build dependencies
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential cmake git \
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential \
             libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev \
-            libglm-dev libtinyxml2-dev liblua5.4-dev libsqlite3-dev
+            libglm-dev libtinyxml2-dev liblua5.4-dev libsqlite3-dev \
+            curl jq ca-certificates
 
-      - name: Install igloo (test framework)
-        run: |
-          git clone https://github.com/codewars/igloo.git /tmp/igloo
-          cd /tmp/igloo
-          git submodule add -b headers-only https://github.com/banditcpp/snowhouse snowhouse || true
-          git submodule update --init --recursive
-          mkdir -p build && cd build
-          cmake ..
-          sudo cmake --build . --target install
-
-      - name: Install Storm Engine v2 (latest release with a .deb)
+      - name: Install Storm Engine v2 (newest release with a .deb)
         run: |
           set -e
-          # The newest GitHub "latest" release may carry no assets, so resolve
+          # The engine's "latest" GitHub release may carry no assets, so resolve
           # the most recent release that actually has an amd64 .deb.
-          TAG=$(gh api "repos/WillSams/storm-engine-v2/releases?per_page=30" \
-            --jq '[.[] | select(any(.assets[]; .name | endswith("amd64.deb")))][0].tag_name')
-          echo "Using Storm Engine release: ${TAG}"
-          gh release download "$TAG" -R WillSams/storm-engine-v2 \
-            --pattern '*amd64.deb' --dir /tmp/engine
-          sudo dpkg -i /tmp/engine/*amd64.deb || sudo apt-get -f install -y
-          sudo ldconfig
+          URL=$(curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/WillSams/storm-engine-v2/releases?per_page=30" \
+            | jq -r '[.[] | select(any(.assets[]; .name | endswith("amd64.deb")))][0]
+                     .assets[] | select(.name | endswith("amd64.deb")) | .browser_download_url')
+          echo "Engine package: ${URL}"
+          curl -fsSL -o /tmp/engine.deb "${URL}"
+          dpkg -i /tmp/engine.deb || apt-get -f install -y
+          ldconfig
 
       - name: Build and test every pattern
         run: |
