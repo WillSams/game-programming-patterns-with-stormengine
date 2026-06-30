@@ -1,0 +1,50 @@
+name: PR Validate
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential cmake git \
+            libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev \
+            libglm-dev
+
+      - name: Install igloo (test framework)
+        run: |
+          git clone https://github.com/codewars/igloo.git /tmp/igloo
+          cd /tmp/igloo
+          git submodule add -b headers-only https://github.com/banditcpp/snowhouse snowhouse || true
+          git submodule update --init --recursive
+          mkdir -p build && cd build
+          cmake ..
+          sudo cmake --build . --target install
+
+      - name: Install Storm Engine v2 (latest release)
+        run: |
+          gh release download -R WillSams/storm-engine-v2 \
+            --pattern '*amd64.deb' --dir /tmp/engine
+          sudo dpkg -i /tmp/engine/*amd64.deb || sudo apt-get -f install -y
+          sudo ldconfig
+
+      - name: Build and test every pattern
+        run: |
+          set -e
+          for dir in patterns/*/; do
+            [ -f "${dir}Makefile" ] || continue
+            echo "::group::${dir}"
+            make -C "$dir" test
+            make -C "$dir" run-test
+            echo "::endgroup::"
+          done
