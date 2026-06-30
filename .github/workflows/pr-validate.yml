@@ -21,10 +21,9 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends \
-            build-essential \
+            build-essential binutils curl jq ca-certificates zstd xz-utils \
             libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev \
-            libglm-dev libtinyxml2-dev liblua5.4-dev libsqlite3-dev \
-            curl jq ca-certificates
+            libglm-dev libtinyxml2-dev liblua5.4-dev libsqlite3-dev
 
       - name: Install Storm Engine v2 (newest release with a .deb)
         run: |
@@ -37,7 +36,16 @@ jobs:
                      .assets[] | select(.name | endswith("amd64.deb")) | .browser_download_url')
           echo "Engine package: ${URL}"
           curl -fsSL -o /tmp/engine.deb "${URL}"
-          dpkg -i /tmp/engine.deb || apt-get -f install -y
+
+          # Extract the .deb by hand — the container's dpkg can't read modern
+          # zstd-compressed packages. Handles zstd / xz / gzip data members.
+          cd /tmp
+          ar x engine.deb
+          if   [ -f data.tar.zst ]; then zstd -d -f data.tar.zst -o data.tar
+          elif [ -f data.tar.xz  ]; then unxz -f data.tar.xz
+          elif [ -f data.tar.gz  ]; then gunzip -f data.tar.gz
+          fi
+          tar -xf data.tar -C /
           ldconfig
 
       - name: Build and test every pattern
@@ -45,8 +53,9 @@ jobs:
           set -e
           # Patterns live at varying depths (patterns/<name> or
           # patterns/<category>/<name>); test any folder that has a Makefile.
-          find patterns -name Makefile -print0 | while IFS= read -r -d '' mk; do
-            dir="$(dirname "$mk")"
+          # POSIX loop — the container's default shell is dash, not bash.
+          find patterns -name Makefile | while read -r mk; do
+            dir=$(dirname "$mk")
             echo "::group::${dir}"
             make -C "$dir" test
             make -C "$dir" run-test
