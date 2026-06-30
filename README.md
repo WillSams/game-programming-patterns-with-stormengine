@@ -18,7 +18,7 @@ follow the book's structure.
 | [Command](./patterns/design/command/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/command.html) |
 | [Flyweight](./patterns/design/flyweight/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/flyweight.html) |
 | [Observer](./patterns/design/observer/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/observer.html) |
-| Prototype | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/prototype.html) |
+| [Prototype](./patterns/design/prototype/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/prototype.html) |
 | Singleton | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/singleton.html) |
 | State | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/state.html) |
 
