@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../Sprite.h"
-#include "MoveCommand.h"
+#include "Command.h"
 
-class MoveLeftCommand : public MoveCommand {
+class MoveLeftCommand : public Command {
 public:
   Direction getDirection() override;
 };
