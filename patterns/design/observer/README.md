@@ -2,6 +2,8 @@
 
 > Reference: [Game Programming Patterns — Observer](https://gameprogrammingpatterns.com/observer.html)
 
+![Observer Pattern Example](./screenshot.png)
+
 The observer pattern lets one object (the **subject**) tell a changing set of
 other objects (the **observers**) that something happened, without being coupled
 to what they are or what they do. Add or remove listeners freely; the subject

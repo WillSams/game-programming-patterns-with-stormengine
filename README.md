@@ -20,7 +20,7 @@ follow the book's structure.
 | [Observer](./patterns/design/observer/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/observer.html) |
 | [Prototype](./patterns/design/prototype/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/prototype.html) |
 | [Singleton](./patterns/design/singleton/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/singleton.html) |
-| State | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/state.html) |
+| [State](./patterns/design/state/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/state.html) |
 
 ### Sequencing Patterns — `patterns/sequencing/`
 

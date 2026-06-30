@@ -2,6 +2,8 @@
 
 > Reference: [Game Programming Patterns — Flyweight](https://gameprogrammingpatterns.com/flyweight.html)
 
+![Flyweight Example](./screenshot.png)
+
 The flyweight pattern shares one copy of an object's *intrinsic* (context-free)
 state across many uses, instead of duplicating it. Here a 10×10 `World` is made
 of 100 tiles, but every tile points at one of just **three** shared `Terrain`

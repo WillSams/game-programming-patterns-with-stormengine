@@ -2,6 +2,8 @@
 
 > Reference: [Game Programming Patterns — Prototype](https://gameprogrammingpatterns.com/prototype.html)
 
+![Prototype Example](./screenshot.png)
+
 The prototype pattern creates new objects by **cloning an existing instance**
 instead of instantiating a class by name. A `Spawner` holds one prototype
 monster and makes more by calling `clone()` on it — no separate spawner class

@@ -2,6 +2,8 @@
 
 > Reference: [Game Programming Patterns — Singleton](https://gameprogrammingpatterns.com/singleton.html)
 
+![Singleton Example](./screenshot.png)
+
 A singleton guarantees a class has **exactly one instance** and gives it a
 global access point. Here `Settings` exposes `Settings::instance()`; any code can
 read or change the shared volume/difficulty, and there can only ever be one
