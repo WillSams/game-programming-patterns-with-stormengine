@@ -15,7 +15,7 @@ std::string Terrain::getTextureName() const {
   case 0:
     return "grass";
   case 1:
-    return "river";
+    return "water";
   case 2:
     return "hill";
   }

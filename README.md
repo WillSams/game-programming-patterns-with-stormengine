@@ -13,7 +13,7 @@ specs, and README.
 | Pattern | Status | Reference |
 |---|---|---|
 | [Command](./patterns/command/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/command.html) |
-| [Flyweight](./patterns/flyweight/README.md) | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/flyweight.html) |
+| [Flyweight](./patterns/flyweight/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/flyweight.html) |
 
 ## Requirements
 
