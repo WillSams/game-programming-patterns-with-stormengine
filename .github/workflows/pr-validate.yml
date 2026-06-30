@@ -41,8 +41,10 @@ jobs:
       - name: Build and test every pattern
         run: |
           set -e
-          for dir in patterns/*/; do
-            [ -f "${dir}Makefile" ] || continue
+          # Patterns live at varying depths (patterns/<name> or
+          # patterns/<category>/<name>); test any folder that has a Makefile.
+          find patterns -name Makefile -print0 | while IFS= read -r -d '' mk; do
+            dir="$(dirname "$mk")"
             echo "::group::${dir}"
             make -C "$dir" test
             make -C "$dir" run-test

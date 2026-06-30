@@ -1,10 +1,13 @@
 #!/bin/sh
 
 BIN	= $(NAME)
-BIN_DIR   		= ./../../bin
+# Repo root, derived from this file's own location, so patterns work at any
+# folder depth (e.g. patterns/<name>/ or patterns/<category>/<name>/).
+ROOT_DIR  		= $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+BIN_DIR   		= $(ROOT_DIR)/bin
 TARGET 			= $(BIN_DIR)/$(BIN)
 TESTTARGET 		= $(BIN_DIR)/test-$(BIN)
-DATA_PREFIX   	= $(PWD)/../../assets/
+DATA_PREFIX   	= $(ROOT_DIR)/assets/
 
 CC = g++
 LIB = -L/usr/local/lib -Wl,-rpath=/usr/local/lib \
