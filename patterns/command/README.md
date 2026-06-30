@@ -1,5 +1,7 @@
 # Command Pattern
 
+> Reference: [Game Programming Patterns — Command](https://gameprogrammingpatterns.com/command.html)
+
 The command pattern encapsulates input as command objects, decoupling *what*
 triggers an action (a key) from the action itself. This makes input remappable
 and keeps game logic unaware of specific keys.
