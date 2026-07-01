@@ -1,0 +1,63 @@
+name: PR Validate
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # Run inside the same image the engine .deb is built against: igloo is
+    # preinstalled, and the tinyxml2 / SDL sonames match the engine library
+    # (a bare ubuntu runner ships newer sonames and fails to link).
+    container: storminator16/igloo-testing:latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential binutils curl jq ca-certificates zstd xz-utils \
+            libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev \
+            libglm-dev libtinyxml2-dev liblua5.4-dev libsqlite3-dev
+
+      - name: Install Storm Engine v2 (newest release with a .deb)
+        run: |
+          set -e
+          # The engine's "latest" GitHub release may carry no assets, so resolve
+          # the most recent release that actually has an amd64 .deb.
+          URL=$(curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/WillSams/storm-engine-v2/releases?per_page=30" \
+            | jq -r '[.[] | select(any(.assets[]; .name | endswith("amd64.deb")))][0]
+                     .assets[] | select(.name | endswith("amd64.deb")) | .browser_download_url')
+          echo "Engine package: ${URL}"
+          curl -fsSL -o /tmp/engine.deb "${URL}"
+
+          # Extract the .deb by hand — the container's dpkg can't read modern
+          # zstd-compressed packages. Handles zstd / xz / gzip data members.
+          cd /tmp
+          ar x engine.deb
+          if   [ -f data.tar.zst ]; then zstd -d -f data.tar.zst -o data.tar
+          elif [ -f data.tar.xz  ]; then unxz -f data.tar.xz
+          elif [ -f data.tar.gz  ]; then gunzip -f data.tar.gz
+          fi
+          tar -xf data.tar -C /
+          ldconfig
+
+      - name: Build and test every pattern
+        run: |
+          set -e
+          # Patterns live at varying depths (patterns/<name> or
+          # patterns/<category>/<name>); test any folder that has a Makefile.
+          # POSIX loop — the container's default shell is dash, not bash.
+          find patterns -name Makefile | while read -r mk; do
+            dir=$(dirname "$mk")
+            echo "::group::${dir}"
+            make -C "$dir" test
+            make -C "$dir" run-test
+            echo "::endgroup::"
+          done
