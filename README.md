@@ -26,7 +26,7 @@ follow the book's structure.
 
 | Pattern | Status | Reference |
 |---|---|---|
-| Double Buffer | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/double-buffer.html) |
+| [Double Buffer](./patterns/sequencing/double_buffer/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/double-buffer.html) |
 | Game Loop | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/game-loop.html) |
 | Update Method | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/update-method.html) |
 
