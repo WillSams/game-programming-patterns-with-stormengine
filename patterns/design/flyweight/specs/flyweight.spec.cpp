@@ -7,12 +7,12 @@
 using namespace igloo;
 
 Describe(TerrainSpec) {
-    It(exposes_its_intrinsic_movement_cost) {
+    It(should_expose_its_intrinsic_movement_cost) {
         Terrain grass(1, false, true, false, 0);
         Assert::That(grass.getMovementCost(), Equals(1));
     };
 
-    It(maps_a_texture_index_to_a_name) {
+    It(should_map_a_texture_index_to_a_name) {
         Terrain grass(1, false, true, false, 0);
         Terrain river(2, true, false, false, 1);
         Terrain hill(3, false, false, true, 2);
@@ -21,14 +21,14 @@ Describe(TerrainSpec) {
         Assert::That(hill.getTextureName(), Equals("hill"));
     };
 
-    It(reports_whether_it_is_water) {
+    It(should_report_whether_it_is_water) {
         Terrain river(2, true, false, false, 1);
         Assert::That(river.isWater(), Equals(true));
     };
 };
 
 Describe(WorldSpec) {
-    It(fills_every_tile) {
+    It(should_fill_every_tile) {
         World world;
         world.generateTerrain(1);
         // getTile returns a valid terrain for every cell (no nulls / no crash).
@@ -36,7 +36,7 @@ Describe(WorldSpec) {
         Assert::That(world.getTile(WIDTH - 1, HEIGHT - 1).getMovementCost() > 0, Equals(true));
     };
 
-    It(shares_at_most_three_terrain_instances_across_the_grid) {
+    It(should_share_at_most_three_terrain_instances_across_the_grid) {
         World world;
         world.generateTerrain(7);
 
@@ -49,7 +49,7 @@ Describe(WorldSpec) {
         Assert::That(distinct.size() <= 3u, Equals(true));
     };
 
-    It(is_reproducible_for_a_given_seed) {
+    It(should_be_reproducible_for_a_given_seed) {
         World a, b;
         a.generateTerrain(42);
         b.generateTerrain(42);
