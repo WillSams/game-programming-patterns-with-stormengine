@@ -8,14 +8,14 @@ using namespace igloo;
 
 Describe(ScoreSubjectSpec) {
 
-    It(accumulates_points) {
+    It(should_accumulate_points) {
         ScoreSubject subject;
         subject.addPoints(10);
         subject.addPoints(15);
         Assert::That(subject.score(), Equals(25));
     };
 
-    It(notifies_a_registered_observer) {
+    It(should_notify_a_registered_observer) {
         ScoreSubject subject;
         HudObserver hud;
         subject.addObserver(&hud);
@@ -23,7 +23,7 @@ Describe(ScoreSubjectSpec) {
         Assert::That(hud.displayed(), Equals(30));
     };
 
-    It(notifies_every_registered_observer) {
+    It(should_notify_every_registered_observer) {
         ScoreSubject subject;
         HudObserver a, b;
         subject.addObserver(&a);
@@ -33,7 +33,7 @@ Describe(ScoreSubjectSpec) {
         Assert::That(b.displayed(), Equals(7));
     };
 
-    It(stops_notifying_a_removed_observer) {
+    It(should_stop_notifying_a_removed_observer) {
         ScoreSubject subject;
         HudObserver hud;
         subject.addObserver(&hud);
@@ -43,7 +43,7 @@ Describe(ScoreSubjectSpec) {
         Assert::That(hud.displayed(), Equals(10));
     };
 
-    It(reports_its_observer_count) {
+    It(should_report_its_observer_count) {
         ScoreSubject subject;
         HudObserver hud;
         Assert::That(subject.observerCount(), Equals(0));
@@ -56,7 +56,7 @@ Describe(ScoreSubjectSpec) {
 
 Describe(MilestoneObserverSpec) {
 
-    It(does_not_fire_before_the_first_milestone) {
+    It(should_not_fire_before_the_first_milestone) {
         ScoreSubject subject;
         MilestoneObserver milestone(100);
         subject.addObserver(&milestone);
@@ -65,7 +65,7 @@ Describe(MilestoneObserverSpec) {
         Assert::That(milestone.milestonesReached(), Equals(0));
     };
 
-    It(fires_when_a_milestone_is_crossed) {
+    It(should_fire_when_a_milestone_is_crossed) {
         ScoreSubject subject;
         MilestoneObserver milestone(100);
         subject.addObserver(&milestone);
@@ -74,7 +74,7 @@ Describe(MilestoneObserverSpec) {
         Assert::That(milestone.consumeJustReached(), Equals(true));
     };
 
-    It(consumes_the_one_shot_flag) {
+    It(should_consume_the_one_shot_flag) {
         ScoreSubject subject;
         MilestoneObserver milestone(100);
         subject.addObserver(&milestone);
@@ -83,7 +83,7 @@ Describe(MilestoneObserverSpec) {
         Assert::That(milestone.consumeJustReached(), Equals(false)); // already consumed
     };
 
-    It(counts_multiple_milestones) {
+    It(should_count_multiple_milestones) {
         ScoreSubject subject;
         MilestoneObserver milestone(100);
         subject.addObserver(&milestone);
@@ -91,7 +91,7 @@ Describe(MilestoneObserverSpec) {
         Assert::That(milestone.milestonesReached(), Equals(2));
     };
 
-    It(lets_two_observers_react_to_one_change_differently) {
+    It(should_let_two_observers_react_to_one_change_differently) {
         ScoreSubject subject;
         HudObserver hud;
         MilestoneObserver milestone(100);

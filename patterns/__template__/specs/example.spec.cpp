@@ -6,11 +6,11 @@ using namespace igloo;
 // Igloo is header-only; tests read as plain-English Describe/It blocks.
 Describe(ExampleSpec) {
 
-    It(passes_a_placeholder_assertion) {
+    It(should_pass_a_placeholder_assertion) {
         Assert::That(1 + 1, Equals(2));
     };
 
-    It(supports_string_matchers) {
+    It(should_support_string_matchers) {
         std::string greeting = "hello";
         Assert::That(greeting, Equals("hello"));
     };
