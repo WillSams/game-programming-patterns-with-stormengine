@@ -28,7 +28,7 @@ follow the book's structure.
 |---|---|---|
 | [Double Buffer](./patterns/sequencing/double_buffer/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/double-buffer.html) |
 | [Game Loop](./patterns/sequencing/game_loop/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/game-loop.html) |
-| Update Method | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/update-method.html) |
+| [Update Method](./patterns/sequencing/update_method/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/update-method.html) |
 
 ### Behavioral Patterns — `patterns/behavioral/`
 
