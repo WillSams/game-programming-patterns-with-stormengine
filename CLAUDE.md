@@ -191,7 +191,7 @@ A pattern's demo is a **screen**, and arithmetic that is merely reasoned about i
 how four layout defects in the sibling project reached the owner as screenshots. So
 render it and look at it:
 
-- `/tmp/shot_multi.cpp` software-renders a demo's `render()` — an
+- `tools/shot_multi.cpp` software-renders a demo's `render()` — an
   `SDL_CreateSoftwareRenderer` over a `SDL_CreateRGBSurfaceWithFormat`, then
   `SDL_SaveBMP`. It takes a **key sequence** (one character = one keypress) and
   compiles against a pattern's `playState.cpp` alone:
@@ -199,11 +199,16 @@ render it and look at it:
   ```sh
   E=external/storm-engine-v2
   g++ -std=c++17 -I include -I build/engine-include -I patterns/<cat>/<name> \
-      -include engineGlobal.h /tmp/shot_multi.cpp \
+      -include engineGlobal.h tools/shot_multi.cpp \
       patterns/<cat>/<name>/src/states/playState.cpp \
       -L$E/bin -Wl,-rpath,$E/bin -lstormenginev2 \
       -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -o /tmp/shot
   ```
+
+  ⚠️ **IT LIVES IN `tools/`, NOT `/tmp`.** It did live in `/tmp` and it went away
+  with the boot — the docs kept naming a file that was not there, which is how the
+  pattern below got checked in the first place. It is repo infrastructure now; CI
+  ignores it (the loop looks for a `Makefile`).
 
 - ⚠️ **`'_'` IS SPACE, AND EVERY OTHER CHARACTER IS ITS OWN KEYCODE.** The first
   version mapped `'s'` to space, a convention carried over from the demo it was
