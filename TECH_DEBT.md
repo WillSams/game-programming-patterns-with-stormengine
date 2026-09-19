@@ -1,11 +1,11 @@
-# Tech Debt — Status: 1 open item, none in the demo code
+# Tech Debt — Status: 0 open items, none in the demo code
 
-Last reviewed: 2026-11-15 — first re-audit, after the engine became a submodule
-and the pattern count grew from 9 to 17.
+Last reviewed: 2026-11-15 — first re-audit, after the engine became a submodule and
+all 19 pattern chapters landed.
 
-**The pattern code is still healthy.** 10,342 lines across 187 headers and
-sources in 17 demos, largest file 253 lines
-(`patterns/optimization/data_locality/src/states/playState.cpp`), no raw
+**The pattern code is still healthy.** 12,206 lines across 203 headers and
+sources in 19 demos, largest file 315 lines
+(`patterns/optimization/object_pool/specs/objectPool.spec.cpp`), no raw
 `new`/`delete` outside the one `new PlayState(...)` the engine's
 `GameStateMachine` requires, and no throwing constructs reachable from any
 header. Every finding is in the build, the CI, or the docs — the scaffolding
@@ -20,41 +20,30 @@ not.
 
 | Priority | Focus | Status |
 |----------|-------|--------|
-| P1 | CI container image is the last unpinned input (`:latest`) | 🔴 Open |
+| — | Nothing open | ✅ |
 
-Everything the first audit filed is now closed. That audit predated the engine
-submodule, and three of its six items were consequences of the system-installed
-engine; the rest were fixed in the re-audit commit described below.
+Every item the first audit filed is closed, including the one raised by the
+re-audit. That audit predated the engine submodule, and three of its six findings
+were consequences of the system-installed engine; the rest were fixed in the
+re-audit commit, and the last one — the floating CI container tag — is closed
+below.
 
-## Open item
+## Closed by the re-audit's follow-up
 
-### P1 — The CI container image is unpinned
+### P1 — The CI container image was unpinned
 
 **Category:** structural rot (build reproducibility)
-**Evidence:** `.github/workflows/pr-validate.yml:19` —
-`container: storminator16/igloo-testing:latest`. The workflow deliberately pins
-everything else now: the engine is the submodule at a commit
-(`external/storm-engine-v2`, `heads/main`), and `actions/checkout` and
-`actions/github-script` are on major tags. The container is a floating tag.
+**Evidence:** `.github/workflows/pr-validate.yml` had
+`container: storminator16/igloo-testing:latest`. `igloo` is installed in that image
+and the image's SDL / tinyxml2 sonames are what the engine library links against,
+so republishing the tag could fail a PR that touched nothing in it — the same
+class of surprise the engine pin exists to prevent. The image publishes only two
+tags, `latest` and `bookworm`, both floating.
 
-This is the exact failure the engine pin was introduced to kill, one layer up.
-`igloo` is *installed in the image*, and the image's SDL / tinyxml2 sonames are
-what the engine library links against, so republishing that tag changes a
-build input with no commit in this repo. A green PR today and a red one tomorrow
-with nothing between is the thing a teaching repo cannot afford, because a
-reader has no way to tell which side moved.
-
-**Risk:** Low frequency, high confusion. The failure would present as a link
-error about a soname, in a diff that touched none of it, and the maintainer of
-the image is the same person who owns this repo — so it will happen during an
-unrelated engine bump and be blamed on that.
-
-**Fix:** Pin the image to a digest
-(`storminator16/igloo-testing@sha256:...`), or publish versioned tags
-(`:1`, `:2026-11`) and reference one. Dependabot can bump a digest. Same
-argument as the engine pin: a build should be traceable to a commit here.
-
-**Cost:** One line, once a digest or version tag exists to point at.
+**Fixed:** pinned to the digest `latest` resolved to on 2026-11-15
+(`sha256:35fa1e37…4b40`), with the one-line command to bump it in a comment beside
+it. The engine, the actions and the container are now all traceable to something
+immutable, and a red build can be traced to a change here.
 
 ## Fixed since the first audit
 
@@ -78,7 +67,7 @@ re-file them.
   `patterns/design/command/` must see the whole program — window, renderer,
   `GameStateMachine`, state — without following an include into a shared
   library. Self-containedness is the product. **What would change this:** if a
-  shell change ever has to be applied 17 times *and* getting it wrong fails
+  shell change ever has to be applied 19 times *and* getting it wrong fails
   silently. Today it fails at compile time, in one demo. The one thing that is
   *not* a template is the 3×5 font, and it is already shared
   (`include/pixelFont.h`, spec in `patterns/__shared__/`) precisely because it
@@ -101,10 +90,10 @@ re-file them.
 - **The engine's `GameState::millisecondsPreviousFrame` is dead in every demo.**
   Each declares its own `millisecondsPreviousFrame_` beside it — not shadowing,
   the names differ by the trailing underscore — so it compiles cleanly and the
-  demos are internally consistent. Left alone because changing it touches 17
-  files to save 17 ints. Reconsider only if the engine ever *writes* that member.
+  demos are internally consistent. Left alone because changing it touches 19
+  files to save 19 ints. Reconsider only if the engine ever *writes* that member.
 
-- **Indentation is split: 113 files at 4 spaces, 31 at 2, 25 tab-indented**, and
+- **Indentation is split: 124 files at 4 spaces, 32 at 2, 27 tab-indented**, and
   there is still no `.clang-format` in the repo. The 2-space files are the
   `design/` pattern cores — engine house style; the rest are shells and specs.
   Compounding it, `.vscode/settings.json:24` sets `editor.formatOnSave: true`
@@ -151,5 +140,7 @@ re-file them.
 
 ## Next step
 
-P1: pin the CI container image to a digest or a versioned tag. It is the last
-input to a build that is not traceable to a commit, and it is one line.
+None. The next audit should start by re-deriving the counts in
+[What to watch](#what-to-watch) — they move with every pattern — and by checking
+that the three pins (engine submodule, action majors, container digest) still
+resolve to what this file says they do.

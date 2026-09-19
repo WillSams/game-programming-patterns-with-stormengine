@@ -9,9 +9,20 @@ jobs:
     # Run inside the igloo-testing image: igloo is preinstalled there, and its
     # tinyxml2 / SDL sonames match what the pinned engine library links against
     # (a bare ubuntu runner ships newer sonames and fails to link).
-    # ⚠️ `:latest` is the one unpinned input left in this workflow. See
-    # TECH_DEBT.md -- changed out from under a green PR with no commit here.
-    container: storminator16/igloo-testing:latest
+    #
+    # ⚠️ PINNED BY DIGEST, NOT BY `:latest`. The tag was the last build input that
+    # could change with no commit here -- igloo lives in the image and its sonames are
+    # what the library links against, so republishing the tag could fail a PR that
+    # touched none of it. This is the digest `storminator16/igloo-testing:latest`
+    # resolved to on 2026-11-15 (tags on that repo are `latest` and `bookworm`, both
+    # floating). To bump it deliberately:
+    #
+    #   TOKEN=$(curl -s "https://auth.docker.io/token?service=registry.docker.io&scope=repository:storminator16/igloo-testing:pull" | jq -r .token)
+    #   curl -sI -H "Authorization: Bearer $TOKEN" \
+    #     -H 'Accept: application/vnd.oci.image.index.v1+json' \
+    #     https://registry-1.docker.io/v2/storminator16/igloo-testing/manifests/latest \
+    #     | grep -i docker-content-digest
+    container: storminator16/igloo-testing@sha256:35fa1e37153efa1bbac631384e94db029a9fb764a599be35100b50e2f0624b40
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -23,6 +23,10 @@ revision — never a system install.**
 - The pin is a **commit**, so a build is reproducible until someone moves it on
   purpose. An automatic "always newest" was rejected: a red build must be
   traceable to a commit here, not to one that landed in the engine minutes ago.
+- **CI's container is pinned the same way**, by digest, in
+  `.github/workflows/pr-validate.yml`. It holds igloo and the SDL/tinyxml2 sonames
+  the engine links against, so the tag could fail a PR that touched nothing; the
+  bump command is in the comment beside it, and `TECH_DEBT.md` records why.
 
 ⚠️ **There is deliberately NO fallback to a system-installed engine.** There was
 one, and it is how this repo and CI silently ran different engines — **2.3.0
