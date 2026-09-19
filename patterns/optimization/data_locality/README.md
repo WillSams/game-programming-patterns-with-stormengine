@@ -22,36 +22,10 @@ and misses once per sixteen elements. Nothing about the arithmetic changes. The
 Both layouts share **one** `StepParticle`, because two copies of the update rule is
 how an "optimization" silently becomes a different simulation.
 
-### ⚠️ What a spec can and cannot pin here
-
-**A test cannot assert that memory is faster.** That is a fact about a machine, not
-about a suite, and a timing assertion is a flake generator. So the specs pin the two
-deterministic halves:
-
-1. **The optimization does not change the world.** Both layouts are stepped and
-   compared. The comparison is deliberately tolerant in the last bit — a compiler
-   may vectorize one loop and contract a multiply-add in the other, and insisting on
-   exact equality would blame the code for the compiler's arithmetic.
-2. **The layout is what the pattern claims**, checked rather than trusted:
-   `sizeof(ParticleHot) == 4 * sizeof(float)`; consecutive elements are **exactly one
-   struct apart**; and the cold array is **byte-identical after a hot update** — the
-   actual claim of the pattern ("the hot loop did not drag cold data in"), which a
-   timing number cannot show.
-
-The screen shows the measurement. **The specs prove the fast one is not a different
-world.**
-
-## The cost the pattern adds — not hidden
-
-A split world's cold data must be reunited with its hot data **through a shared
-index**. The demo's field read both arrays per dot, which is the reunion the specs
-pin, and it is why a split layout is not simply "better": the loop got cheaper and
-the reader got an index to keep.
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | 1 / 2 | 200 / 2000 particles |
 | B | Time both layouts (12 passes each, after warming both up) |
 | R | Reset the field |

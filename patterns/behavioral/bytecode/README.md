@@ -28,24 +28,10 @@ opcode, no rebuild of the machine.
 - `PlayState` only draws: the listing with the program counter on it, the machine's
   state, and its stack.
 
-### Two things the chapter leaves out, and this machine does not
-
-**A fault is possible, because a program is data.** `AddHealth` with nothing
-pushed is a program that is wrong in a way code cannot be. The chapter assumes
-well-formed bytecode; a machine running data from outside the program cannot, so a
-stack underflow **faults** rather than reading whatever is on the stack.
-
-**A fault does not change the state it was about to change.** The natural
-implementation pops first and faults after — which consumes a value the
-instruction never used, so the *next* instruction acts on a stack the program did
-not describe. `step()` **peeks, then pops only once the instruction has what it
-needs**; `specs/bytecodeVm.spec.cpp` pins it (a faulting `AddHealth` after
-`SetHealth 12` leaves health at 12, not 0).
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | Space | Run **one** instruction, so the machine can be watched |
 | Enter | Run to a halt (or a fault) |
 | R | Rewind to the start of the same program |

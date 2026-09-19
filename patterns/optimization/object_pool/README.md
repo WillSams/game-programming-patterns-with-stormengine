@@ -20,28 +20,10 @@ during every one.
 - `Animate` walks **every** slot, live or dead, and skips the dead with one branch.
   A pool does not get cheaper as it empties; it gets predictable.
 
-### ⚠️ Two things the chapter leaves to the reader, and this one does not
-
-**Exhaustion is refused, never overwritten.** A full pool returns `-1` and the
-caller decides what to do. The tempting alternative — recycle the oldest object to
-make room — looks like it works, because bursts keep appearing, while it silently
-cuts the life of something already on screen. `REFUSED` counts the refusals, and a
-spec proves the refused spawn left the live particle's every field untouched.
-
-**Reuse is invisible, and that is the pattern's real danger.** A returned object
-still has its old bytes at the same address, so a slot that is read without asking
-`IsAlive` first yields a **plausible ghost** — the values look like a particle. The
-specs pin it: after a slot is released and taken again, what comes back is the new
-particle's data and nothing of the old one.
-
-⚠️ This implementation hands out an **index** and requires `IsAlive` before `At`.
-It does **not** hand out generation counters, which would catch a handle held
-across a frame — a demo that never holds one would carry the machinery unused.
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | Space | Spawn one particle |
 | B | Burst of 20 — press it faster than particles expire |
 | A | Auto-fountain on/off |

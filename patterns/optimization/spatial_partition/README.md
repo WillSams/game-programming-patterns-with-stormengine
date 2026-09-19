@@ -21,29 +21,10 @@ the number of pairs does.
   `(2·ring+1)²` block of cells around a position. `ring = 0` is "who is in this
   cell", which is what the demo asks.
 
-### ⚠️ The pattern's silent bug is a stale bucket
-
-An entity that crosses into a new cell but is never taken out of the old one is
-still found **where it used to be**, and not found where it is. Nothing crashes,
-nothing warns — a query just returns the object from the wrong place. It is the
-same shape of failure as a missed dirty mark.
-
-So the specs check placement after a **crossing**, not only after an insert, and
-check the invariant that makes every other answer trustworthy: after 200 moves
-along bouncing paths, the bucket sizes still sum to the number of entities in the
-grid, and each one is findable at its current position. A duplicate is impossible
-by construction — an entity is in one bucket and the block visits each bucket once
-— which is exactly why a duplicate would mean the placement is broken rather than
-something to filter out in the query.
-
-⚠️ **A fixed lattice is the trade, not a defect.** The cells never adapt, and a bad
-cell size is the cost of choosing this pattern. Adaptive subdivision is a tree,
-which is a different chapter.
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | A | Entity drift on/off |
 | P | Park the probe where it is |
 | G | Grid lines on/off — the buckets are still there |

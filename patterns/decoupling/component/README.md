@@ -28,24 +28,10 @@ each one **is** is what it is **made of**.
   input component sets a velocity, the physics component moves the entity, and the
   appearance component describes it where it now is.
 
-### ⚠️ Order is meaning
-
-Appearance reads the transform, so an appearance placed **before** physics describes
-where the entity *was*. Nothing in the code prevents that — it is a wiring decision,
-and two specs pin what it costs.
-
-### ⚠️ What a full update shows you is the SUM of the parts
-
-The first version of `jumps_only_from_the_ground` asserted that a refused jump
-leaves `vy == 0`. It left `-1.5`: the jump *was* refused and the physics component
-had already applied gravity. Asserting the value one component would have left
-alone asserts a frame that does not exist — which is the pattern's own subject, so
-the spec says "not a jump" instead.
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | A / D (or Left / Right) | One tick, moving left / right |
 | Space (or Up) | One tick, jumping — only from the ground |
 | T | Ten ticks with no input, so the projectile's fall is visible |
