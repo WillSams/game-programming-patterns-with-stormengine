@@ -144,6 +144,12 @@ Steps to add one:
 
 - **Branch, then PR. Never on `main`.** `feat/*`, `fix/*`, `docs/*` — the repo's
   own `branch-name-check` enforces the prefixes.
+- ⚠️ **AND A `not-on-main` PRE-COMMIT HOOK ENFORCES IT, because the sentence above
+  did not.** It was written in this repo and then broken on the very next commit —
+  bytecode went straight onto `main`, by the same pattern the sibling project
+  records twice: a slice finished on `main`, and the next one started there.
+  Nothing left the machine (the push failed), but that was luck. Run
+  `pre-commit install` once per clone.
 - Signed commits. Commit messages say **why**, in the prose this repo already
   uses; the diff says what.
 - `gh` lives at `~/.local/bin/gh` if it is not on `PATH`.
