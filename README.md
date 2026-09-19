@@ -53,7 +53,7 @@ follow the book's structure.
 | [Data Locality](./patterns/optimization/data_locality/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/data-locality.html) |
 | [Dirty Flag](./patterns/optimization/dirty_flag/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/dirty-flag.html) |
 | [Object Pool](./patterns/optimization/object_pool/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/object-pool.html) |
-| Spatial Partition | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/spatial-partition.html) |
+| [Spatial Partition](./patterns/optimization/spatial_partition/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/spatial-partition.html) |
 
 ## Requirements
 
