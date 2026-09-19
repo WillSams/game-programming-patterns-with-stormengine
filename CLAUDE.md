@@ -113,10 +113,31 @@ pattern's UI helpers: `bytecode` keeps its 3x5 font TABLE in a pure
 `src/ui/glyphs.h` (spec'd, and see below) with the SDL drawing in
 `src/ui/pixelText.h`.
 
-Each pattern carries its own copy of that font, which is the same deliberate
-duplication as the shell — the alternative is a shared header that every pattern
-depends on, and this repo's examples are meant to be readable one folder at a
-time.
+⚠️ **THE FONT IS SHARED, AND THAT IS THE DIFFERENCE BETWEEN A TEMPLATE AND A
+DECISION.** The shell (`game.h`, the `playState` skeleton) is a template a reader
+copies and makes their own — repeating it is the affordance. The 3x5 font is ONE
+decision (the glyph shapes, their coverage, the accepted `O`/`0` and `S`/`5`
+collapses), so it lives once:
+
+    include/pixelFont.h    the table, pure
+    include/pixelText.h    the SDL drawer
+    patterns/__shared__/   its spec — `make test && make run-test`
+
+`CODING.md` tenet 1 is why: *"when the same logic appears twice, promote the
+shared **decision** to one named `inline` function in the header that owns the
+behavior"* — and its meta-principle, *"fix the boundary, not the copy"*. The font
+was copied into two patterns, **byte-identically**, with eight patterns still to
+write: ten copies and ten copies of a spec, and a glyph fix would have been an
+N-place edit.
+
+⚠️ **`patterns/__shared__/` is NOT a pattern.** It exists because the per-pattern
+Makefile only globs `specs/*.cpp`, so a shared spec had no home; its `main.cpp` is
+a stub so the CI loop ("any folder with a Makefile") builds it like any other.
+**Do not copy it as a pattern** — `__template__` is that.
+
+⚠️ **AND A PATTERN MUST NOT RE-CREATE THE FONT.** A quoted `#include "pixelText.h"`
+searches the *including file's* own directory first, so a `src/ui/pixelText.h`
+inside a pattern would silently shadow the shared one and re-start the drift.
 
 ⚠️ **A FONT IS A COVERAGE CONTRACT, AND A MISSING GLYPH DRAWS BLANK SILENTLY.**
 `bytecode`'s spec asserts every character the demo prints has a visible glyph, and

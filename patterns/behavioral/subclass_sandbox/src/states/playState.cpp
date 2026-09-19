@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "../ui/pixelText.h"
+#include "pixelText.h"    // shared: include/pixelText.h
 
 const std::string PlayState::s_playID = "PLAY";
 

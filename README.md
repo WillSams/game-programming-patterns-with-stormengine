@@ -92,6 +92,10 @@ commit in *this* repo, not to one that landed in the engine five minutes ago.
 
 ## Build, run, test
 
+The font the demos draw with is **shared** (`include/pixelFont.h` + its SDL
+drawer), and its spec lives in `patterns/__shared__/` — that folder is not a
+pattern; `__template__` is the one to copy.
+
 Each pattern builds independently from its own directory (binaries land in the
 repo-root `bin/`):
 

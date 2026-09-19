@@ -3,7 +3,7 @@
 #include <cstring>
 #include <string>
 
-#include "../src/ui/glyphs.h"
+#include "pixelFont.h"
 
 using namespace igloo;
 
