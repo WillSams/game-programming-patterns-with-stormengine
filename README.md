@@ -48,6 +48,10 @@ follow the book's structure.
 
 | Pattern | Status | Reference |
 |---|---|---|
+| [Component](./patterns/decoupling/component/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/component.html) |
+
+| Pattern | Status | Reference |
+|---|---|---|
 | Component | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/component.html) |
 | Event Queue | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/event-queue.html) |
 | Service Locator | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/service-locator.html) |
