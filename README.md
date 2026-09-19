@@ -57,9 +57,33 @@ follow the book's structure.
 
 ## Requirements
 
-- **Storm Engine v2** installed (`libstormenginev2` + `stormengine2` headers)
+- **Storm Engine v2 — nothing to install.** It is a submodule at
+  `external/storm-engine-v2`, pinned to the revision these examples are written
+  against, and the build compiles it from there. Clone with submodules:
+
+  ```bash
+  git clone --recurse-submodules <this repo>
+  ```
+
+  Already cloned without them? `make engine` fetches and builds the pinned
+  revision. Nothing is installed system-wide, and the build deliberately has no
+  "use the system engine instead" path — that is how a local build and CI came to
+  run different engines (2.3.0 here, 2.3.1 in CI) without either saying so.
 - SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
 - [igloo](https://github.com/joakimkarlsson/igloo) (header-only test framework)
+
+### Staying up to date with the engine
+
+The submodule pins a **commit**, so a build is reproducible until someone moves
+it on purpose:
+
+```bash
+make engine-update    # advance the pin to the engine's newest main, and rebuild
+make engine-version   # which revision is pinned
+```
+
+An automatic "always newest" was rejected: a red build should be traceable to a
+commit in *this* repo, not to one that landed in the engine five minutes ago.
 
 ## Build, run, test
 
@@ -86,4 +110,8 @@ make run-test
 5. Flip the pattern's status to ✅ above.
 
 The shared build config lives in [`common.mk`](./common.mk); it locates the repo
-root from its own path, so patterns work at any folder depth.
+root from its own path, so patterns work at any folder depth. It builds against
+the pinned engine via [`engine.mk`](./engine.mk), and force-includes
+[`include/engineGlobal.h`](./include/engineGlobal.h) — a bridge that puts the
+engine's `namespace storm` names back in the global scope so the pattern code
+reads `GameState` rather than `storm::GameState`.

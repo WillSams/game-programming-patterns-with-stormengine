@@ -14,8 +14,13 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Checkout
+      - name: Checkout (with the pinned Storm Engine v2 submodule)
         uses: actions/checkout@v7
+        with:
+          # THE ENGINE IS THE SUBMODULE, so it has to be here. The build no longer
+          # falls back to a system install: that fallback is how this repo and CI
+          # came to run different engines (2.3.0 installed locally, 2.3.1 in CI).
+          submodules: true
 
       - name: Install dependencies
         run: |
@@ -25,28 +30,15 @@ jobs:
             libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev \
             libglm-dev libtinyxml2-dev liblua5.4-dev libsqlite3-dev
 
-      - name: Install Storm Engine v2 (newest release with a .deb)
+      - name: Storm Engine v2's tinyxml2 (the engine compiles it IN)
+        # The engine's Makefile.debian builds vendor/android/tinyxml2 rather than
+        # linking a system copy, so a from-source build fails without it. It is a
+        # NESTED submodule, so it can only be addressed from inside the engine --
+        # `git submodule update <nested path>` from this repo fails with
+        # "pathspec ... did not match any file(s) known to git".
         run: |
-          set -e
-          # The engine's "latest" GitHub release may carry no assets, so resolve
-          # the most recent release that actually has an amd64 .deb.
-          URL=$(curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
-            "https://api.github.com/repos/WillSams/storm-engine-v2/releases?per_page=30" \
-            | jq -r '[.[] | select(any(.assets[]; .name | endswith("amd64.deb")))][0]
-                     .assets[] | select(.name | endswith("amd64.deb")) | .browser_download_url')
-          echo "Engine package: ${URL}"
-          curl -fsSL -o /tmp/engine.deb "${URL}"
-
-          # Extract the .deb by hand — the container's dpkg can't read modern
-          # zstd-compressed packages. Handles zstd / xz / gzip data members.
-          cd /tmp
-          ar x engine.deb
-          if   [ -f data.tar.zst ]; then zstd -d -f data.tar.zst -o data.tar
-          elif [ -f data.tar.xz  ]; then unxz -f data.tar.xz
-          elif [ -f data.tar.gz  ]; then gunzip -f data.tar.gz
-          fi
-          tar -xf data.tar -C /
-          ldconfig
+          git -C external/storm-engine-v2 submodule update --init --depth 1 \
+            vendor/android/tinyxml2
 
       - name: Build and test every pattern
         run: |

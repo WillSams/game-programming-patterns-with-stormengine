@@ -1,0 +1,4 @@
+[submodule "external/storm-engine-v2"]
+	path = external/storm-engine-v2
+	url = https://github.com/SamsWebs/storm-engine-v2.git
+	ignore = dirty
