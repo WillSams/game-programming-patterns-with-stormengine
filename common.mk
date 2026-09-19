@@ -47,17 +47,26 @@ SRCS	+= $(wildcard src/*.cpp)
 SRCS	+= ./main.cpp
 OBJS 	= $(SRCS:.cpp=.o)
 
-all: clean  $(TARGET)
+# ⚠️ `all` USED TO DEPEND ON `clean`, AND `clean` WIPED THE WHOLE SHARED
+# `$(BIN_DIR)`. Every pattern links into the one repo-root bin/, so building any
+# demo deleted every other demo's binary -- `make` in command, then `make run` in
+# flyweight, met "No such file", and `bin/` held one pattern's output no matter how
+# many existed. It also forced a full rebuild on every invocation. Scoped to this
+# pattern's own outputs, a rebuild is incremental and `bin/` accumulates.
+# The root Makefile keeps the wipe-everything escape hatch.
+all: $(TARGET)
 
 clean:
-	rm -f $(BIN_DIR)/* && rm -f $(shell find . -name "*.o")
+	rm -f $(TARGET) $(TESTTARGET) $(OBJS) $(TESTOBJS)
 
 run:
 	$(TARGET)
 	
-test: test-target
+# NOTE: `test: test-target` used to be declared twice in this file (here and
+# below run-test, where it belonged). Harmless, but it read as two different
+# rules doing two different things. One copy, next to test-target.
 
-.cpp.o: 
+.cpp.o:
 	$(CC) $(CCFLAGS) $< -o $@
 
 $(TARGET) : $(OBJS) $(ENGINE_LIB)
@@ -77,8 +86,8 @@ test: test-target
 # ⚠️ run-test DEPENDS ON THE BUILD. It used to just execute $(TESTTARGET), so it
 # only worked when something else had already built it -- CI runs `make test`
 # first and therefore never saw the gap, while a reader following the README
-# ("make run-test") got "Command not found". Worse after `make`, which cleans:
-# the binary it was about to run had just been deleted.
+# ("make run-test") got "Command not found". Worse while `make` still cleaned
+# first: the binary it was about to run had just been deleted.
 run-test: test-target
 	$(TESTTARGET)
 

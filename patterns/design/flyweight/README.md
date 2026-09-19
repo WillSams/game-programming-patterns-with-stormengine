@@ -29,7 +29,7 @@ distinct `Terrain` addresses.
 ## Build, run, test
 
 ```bash
-make            # builds ../../bin/flyweight_pattern_example
+make            # builds ../../../bin/flyweight_pattern_example
 make run        # draws the terrain grid (Esc to quit)
 make test       # igloo specs for Terrain and World
 make run-test

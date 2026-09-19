@@ -18,10 +18,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           skip-commit-verification: true
       - name: Auto-merge patch and minor updates
+        # ⚠️ THIS CONDITION MATCHED THE STEP NAME ONLY AFTER 2026-09: it used to
+        # accept `semver-major` too, so the step called "patch and minor" merged
+        # major action bumps with no review, on pull_request_target with
+        # contents: write. A major bump with a breaking input change then fails
+        # the NEXT unrelated PR. The clause is gone, not the step name.
         if: >
           steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-minor' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-major'
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}

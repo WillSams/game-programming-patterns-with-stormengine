@@ -32,7 +32,7 @@ the demo lives in `PlayState`.
 ## Build, run, test
 
 ```bash
-make            # builds ../../bin/command_pattern_example
+make            # builds ../../../bin/command_pattern_example
 make run
 make test       # igloo specs for the command classes
 make run-test
