@@ -6,9 +6,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Run inside the same image the engine .deb is built against: igloo is
-    # preinstalled, and the tinyxml2 / SDL sonames match the engine library
+    # Run inside the igloo-testing image: igloo is preinstalled there, and its
+    # tinyxml2 / SDL sonames match what the pinned engine library links against
     # (a bare ubuntu runner ships newer sonames and fails to link).
+    # ⚠️ `:latest` is the one unpinned input left in this workflow. See
+    # TECH_DEBT.md -- changed out from under a green PR with no commit here.
     container: storminator16/igloo-testing:latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

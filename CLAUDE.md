@@ -79,6 +79,14 @@ run-test` executes it. A change verified with only `make test` has proved that t
 specs *compile*. CI runs all three — `make`, `make test`, `make run-test` — in that
 order; do the same.
 
+⚠️ **`make` NO LONGER WIPES THE SHARED `bin/`.** It used to: `all` depended on
+`clean`, and `clean` was `rm -f $(BIN_DIR)/*`, so building one demo deleted every
+other demo's binary and forced a full rebuild each time. `clean` is now scoped to
+this pattern's own target, test target and objects, so builds are incremental and
+`bin/` accumulates. The **root** `Makefile` keeps the wipe-everything target when
+you actually want it. See `TECH_DEBT.md` for what is deliberately still open —
+currently one item, the unpinned CI container image.
+
 ⚠️ **AND TWO TRAPS IN `common.mk`, both of which shipped and both of which CI was
 blind to:**
 

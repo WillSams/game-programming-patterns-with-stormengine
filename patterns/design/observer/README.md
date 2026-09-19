@@ -37,7 +37,7 @@ The score bar grows (HUD observer); every 100 points the screen flashes gold
 ## Build, run, test
 
 ```bash
-make            # builds ../../bin/observer_pattern_example
+make            # builds ../../../bin/observer_pattern_example
 make run
 make test       # igloo specs for Subject and observers
 make run-test
