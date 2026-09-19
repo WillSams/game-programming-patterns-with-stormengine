@@ -50,6 +50,7 @@ follow the book's structure.
 |---|---|---|
 | [Component](./patterns/decoupling/component/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/component.html) |
 | [Event Queue](./patterns/decoupling/event_queue/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/event-queue.html) |
+| [Service Locator](./patterns/decoupling/service_locator/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/service-locator.html) |
 
 | Pattern | Status | Reference |
 |---|---|---|

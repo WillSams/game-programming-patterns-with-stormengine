@@ -161,6 +161,50 @@ Steps to add one:
 4. Implement it, with the pure part in a header under `src/`.
 5. Add its row to the README table and flip the status to ✅.
 
+⚠️ **AN igloo `Describe` IS A CLASS, AND A NESTED ONE CANNOT SEE THE OUTER ONE'S
+DATA MEMBERS.** A spec that declares its test doubles as members of the enclosing
+describe compiles until a case nested inside names them, and then fails with
+`invalid use of non-static data member`. Put anything the cases must name at **file
+scope** (and reset it in `SetUp`), which is also how the locator-style patterns get
+away with a global. One compile cycle in `service_locator`, the same shape as the
+notes about the font: a fact about the harness, not about the pattern.
+
+## Looking at the screen
+
+A pattern's demo is a **screen**, and arithmetic that is merely reasoned about is
+how four layout defects in the sibling project reached the owner as screenshots. So
+render it and look at it:
+
+- `/tmp/shot_multi.cpp` software-renders a demo's `render()` — an
+  `SDL_CreateSoftwareRenderer` over a `SDL_CreateRGBSurfaceWithFormat`, then
+  `SDL_SaveBMP`. It takes a **key sequence** (one character = one keypress) and
+  compiles against a pattern's `playState.cpp` alone:
+
+  ```sh
+  E=external/storm-engine-v2
+  g++ -std=c++17 -I include -I build/engine-include -I patterns/<cat>/<name> \
+      -include engineGlobal.h /tmp/shot_multi.cpp \
+      patterns/<cat>/<name>/src/states/playState.cpp \
+      -L$E/bin -Wl,-rpath,$E/bin -lstormenginev2 \
+      -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -o /tmp/shot
+  ```
+
+- ⚠️ **`'_'` IS SPACE, AND EVERY OTHER CHARACTER IS ITS OWN KEYCODE.** The first
+  version mapped `'s'` to space, a convention carried over from the demo it was
+  written for. A capture aimed at a *different* demo's `S` key therefore pressed
+  SPACE, and the screenshot showed an untouched screen — which reads as "the demo is
+  broken" and is really "the instrument is broken". If a capture shows no change,
+  check the mapping before the code.
+- **MEASURE, DO NOT SQUINT.** The window is 800 wide and ink past 784 is clipped;
+  a second column at `windowWidth/2 + pad` starts at 416. Counting non-background
+  pixels per band has caught a panel painted over a glyph (component), and the
+  identical-ink check proves a claim the sweep cannot: with two different providers
+  registered, the caller column's ink was **byte-identical at 5004** while the
+  service's column fell from 5760 to 909 — the decoupling, measured.
+- ⚠️ **A BAND IN THE WRONG PLACE READS AS "EMPTY".** Two of these passes first
+  reported a blank panel because the measurement range missed it (or ran past the
+  image). Look at the PNG as well as the numbers.
+
 ## Git
 
 - **Branch, then PR. Never on `main`.** `feat/*`, `fix/*`, `docs/*` — the repo's
