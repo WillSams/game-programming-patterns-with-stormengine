@@ -49,6 +49,12 @@ jobs:
           find patterns -name Makefile | while read -r mk; do
             dir=$(dirname "$mk")
             echo "::group::${dir}"
+            # ALL THREE, and the first one is the point: `make` builds the
+            # example, `make test` builds the specs, `make run-test` runs them.
+            # CI used to run only the last two, so when the default goal silently
+            # became the engine library and a bare `make` stopped building the
+            # example, every pattern was broken and the suite stayed green.
+            make -C "$dir"
             make -C "$dir" test
             make -C "$dir" run-test
             echo "::endgroup::"

@@ -1,0 +1,25 @@
+# Pre-commit hooks for game-programming-patterns-with-stormengine.
+#
+# One-time setup (per clone):  pre-commit install
+repos:
+  - repo: local
+    hooks:
+      # A BRANCH GUARD, added 2026-09-19 the same hour the rule was broken.
+      # CLAUDE.md says "branch, then PR, never on main" and that sentence was
+      # written in this repo and then violated on the very next commit: an agent
+      # finished the previous slice on main, started the next one, and committed
+      # bytecode straight onto it. Nothing left the machine -- the push failed --
+      # but only because the push named a branch that did not exist.
+      #
+      # That is the same failure the sibling project recorded twice, and its
+      # conclusion was the same: documentation does not stop it, a hook does.
+      - id: not-on-main
+        name: never commit on main
+        description: Refuse any commit whose branch is main or master
+        entry: >-
+          bash -c 'b=$(git rev-parse --abbrev-ref HEAD); if [ "$b" = main ] ||
+          [ "$b" = master ]; then echo "REFUSING: all changes ship through a PR,
+          never on $b (CLAUDE.md, Git section)"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
