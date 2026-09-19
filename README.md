@@ -49,6 +49,7 @@ follow the book's structure.
 | Pattern | Status | Reference |
 |---|---|---|
 | [Component](./patterns/decoupling/component/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/component.html) |
+| [Event Queue](./patterns/decoupling/event_queue/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/event-queue.html) |
 
 | Pattern | Status | Reference |
 |---|---|---|
