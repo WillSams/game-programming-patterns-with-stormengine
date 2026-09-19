@@ -203,6 +203,16 @@ render it and look at it:
   SPACE, and the screenshot showed an untouched screen — which reads as "the demo is
   broken" and is really "the instrument is broken". If a capture shows no change,
   check the mapping before the code.
+- The tool drives a **key sequence**, one character each: every character is its own
+  keycode, `'_'` is SPACE, `'.'` is one `update()` (a frame that only time produces),
+  and `'|'` is a frame that is rendered and **thrown away** — so a sequence can reach
+  a state a draw had to create first, such as a resolved cache or a counter that has
+  to start from a clean point.
+- ⚠️ **A COLOUR SHARED BY TWO THINGS CANNOT BE COUNTED.** A check for "are any node
+  dots outside the field box" counted the right column's *text*, because the demo
+  draws nodes and labels in the same amber and blue. Measure in a region where only
+  the thing you mean can appear — the gutter between the two columns — or the
+  instrument reports a defect that is not there.
 - **MEASURE, DO NOT SQUINT.** The window is 800 wide and ink past 784 is clipped;
   a second column at `windowWidth/2 + pad` starts at 416. Counting non-background
   pixels per band has caught a panel painted over a glyph (component), and the
