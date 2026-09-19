@@ -159,7 +159,15 @@ Steps to add one:
    is one level shallower).
 3. Replace every `REPLACEME`.
 4. Implement it, with the pure part in a header under `src/`.
-5. Add its row to the README table and flip the status to ✅.
+5. ⚠️ **CONVERT the pattern's EXISTING `🚧 planned` ROW in its category table —
+   do not add a second table.** The instruction here used to read "add its row to
+   the README table and flip the status to ✅", and that is exactly how the README
+   came to carry **two tables per category**: the original `🚧 planned` list stayed
+   put, a new ✅ list grew beside it, and six finished patterns were documented as
+   unbuilt. A generated-looking list is read as a work queue, and the stale one sends
+   the next reader to build something that already exists. Link the name to the
+   pattern's README, set the status, and leave the row where it is — **one table per
+   category, every pattern in it, with its real status.**
 
 ⚠️ **AN igloo `Describe` IS A CLASS, AND A NESTED ONE CANNOT SEE THE OUTER ONE'S
 DATA MEMBERS.** A spec that declares its test doubles as members of the enclosing
