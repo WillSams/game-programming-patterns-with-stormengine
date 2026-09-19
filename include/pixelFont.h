@@ -5,9 +5,22 @@
 
 // ── A 3x5 pixel font, as DATA, with no SDL in sight ──────────────────────────
 //
-// Pure on purpose, and split from the drawing for the same reason the pattern's
-// logic is: `specs/glyphs.spec.cpp` can then assert that every character the
-// demo prints has a VISIBLE glyph, without a window.
+// ⚠️ SHARED, AND ITS SPEC IS TOO, and getting that wrong is why this header is
+// here rather than copied into each pattern. It was copied twice -- byte-identical,
+// 234 lines with its drawer and its spec -- and eight patterns remained, which
+// would have been ten copies and ten copies of a spec. CODING.md's first tenet:
+// "when the same logic appears twice, promote the shared DECISION to one named
+// inline function in the header that owns the behavior", and its meta-principle:
+// "fix the boundary, not the copy". A glyph fix must not be an N-place edit.
+//
+// The pattern folders still repeat their SHELL deliberately -- `game.h` and the
+// `playState` skeleton are a template a reader copies and makes their own, which
+// is an affordance. A glyph table is not a template; it is one decision.
+//
+// The spec lives in `patterns/__shared__/specs/pixelFont.spec.cpp`, because the
+// per-pattern Makefile only globs `specs/*.cpp` and a shared spec had no home.
+// The folder exists for that reason and its `main.cpp` is a stub so the existing
+// CI loop -- "any folder with a Makefile" -- runs it like any other.
 //
 // ⚠️ THAT SPEC IS NOT DECORATION. A missing glyph draws BLANK -- the character
 // is simply not there, and nothing anywhere says so. That failure mode shipped
