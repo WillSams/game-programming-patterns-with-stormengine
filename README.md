@@ -34,6 +34,10 @@ follow the book's structure.
 
 | Pattern | Status | Reference |
 |---|---|---|
+| [Bytecode](./patterns/behavioral/bytecode/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/bytecode.html) |
+
+| Pattern | Status | Reference |
+|---|---|---|
 | Bytecode | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/bytecode.html) |
 | Subclass Sandbox | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/subclass-sandbox.html) |
 | Type Object | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/type-object.html) |

@@ -76,7 +76,25 @@ make run-test # RUNS them  <-- two steps, not one
 
 ⚠️ **`make test` does not run anything.** It builds `bin/test-<name>`; `make
 run-test` executes it. A change verified with only `make test` has proved that the
-specs *compile*. CI runs both, in that order — do the same.
+specs *compile*. CI runs all three — `make`, `make test`, `make run-test` — in that
+order; do the same.
+
+⚠️ **AND TWO TRAPS IN `common.mk`, both of which shipped and both of which CI was
+blind to:**
+
+  * **THE DEFAULT GOAL IS STATED, NOT INHERITED.** `common.mk` includes
+    `engine.mk`, whose first target is the engine library — so for a while a bare
+    `make` built the ENGINE and never the example, for every pattern, while the
+    README said `make` builds the example. `.DEFAULT_GOAL := all` names it. A
+    default goal that depends on include order breaks in one commit and is noticed
+    three later.
+  * **`run-test` DEPENDS ON `test-target`.** It used to just execute the binary, so
+    it only worked when something had already built it — and `make` cleans, so
+    running `make` and then `make run-test` met "Command not found".
+
+Both were found by running the documented commands in the documented order rather
+than by running the suite. **CI now runs `make` too**, because the suite alone
+cannot see a broken default goal: `make test` was green throughout.
 
 ## Writing a pattern
 
@@ -90,7 +108,27 @@ it. The split that falls out of that:
   it is the demo's presentation.
 
 A pattern whose logic can only be tested by opening a window is the wrong shape.
-**Prefer a pure header over logic in the state.**
+**Prefer a pure header over logic in the state.** The same split applies to a
+pattern's UI helpers: `bytecode` keeps its 3x5 font TABLE in a pure
+`src/ui/glyphs.h` (spec'd, and see below) with the SDL drawing in
+`src/ui/pixelText.h`.
+
+Each pattern carries its own copy of that font, which is the same deliberate
+duplication as the shell — the alternative is a shared header that every pattern
+depends on, and this repo's examples are meant to be readable one folder at a
+time.
+
+⚠️ **A FONT IS A COVERAGE CONTRACT, AND A MISSING GLYPH DRAWS BLANK SILENTLY.**
+`bytecode`'s spec asserts every character the demo prints has a visible glyph, and
+that no two characters render identically *except* the two conventions it names
+(`O`/`0` and `S`/`5`, which collapse in a 3x5 font and are told apart by context).
+It found those two the moment it was written.
+
+⚠️ **AND NO TEST CAN SEE THAT AN `N` LOOKS LIKE A `K`.** Two attempts at that
+glyph were wrong and the rendered alphabet was the only thing that showed it — the
+demo's own label read "SPELL 1 MIKOR HEAL". **M, N and W are approximations at 3x5**
+(three columns cannot draw a diagonal). Render the alphabet and read it when you
+touch the font.
 
 Steps to add one:
 

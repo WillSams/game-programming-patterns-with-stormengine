@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# ⚠️ THE DEFAULT GOAL IS STATED, NOT INHERITED. `engine.mk` is included from
+# here and its first target is the engine library, which silently became the
+# default goal -- so a bare `make` built the ENGINE and never the example, for
+# every pattern, and the README says `make` builds the example. A default goal
+# that depends on include order is the kind of thing that breaks in one commit
+# and is noticed three commits later; name it.
+.DEFAULT_GOAL := all
+
 BIN	= $(NAME)
 # Repo root, derived from this file's own location, so patterns work at any
 # folder depth (e.g. patterns/<name>/ or patterns/<category>/<name>/).
@@ -66,7 +74,12 @@ TESTOBJS  = $(TESTRCS:.cpp=.o)
 	
 test: test-target
 
-run-test:
+# ⚠️ run-test DEPENDS ON THE BUILD. It used to just execute $(TESTTARGET), so it
+# only worked when something else had already built it -- CI runs `make test`
+# first and therefore never saw the gap, while a reader following the README
+# ("make run-test") got "Command not found". Worse after `make`, which cleans:
+# the binary it was about to run had just been deleted.
+run-test: test-target
 	$(TESTTARGET)
 
 test-target: $(TESTOBJS) $(ENGINE_LIB)
