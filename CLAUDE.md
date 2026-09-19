@@ -148,8 +148,17 @@ Steps to add one:
   did not.** It was written in this repo and then broken on the very next commit —
   bytecode went straight onto `main`, by the same pattern the sibling project
   records twice: a slice finished on `main`, and the next one started there.
-  Nothing left the machine (the push failed), but that was luck. Run
-  `pre-commit install` once per clone.
+  Nothing left the machine (the push failed), but that was luck.
+
+  ⚠️ **AND THE HOOK ITSELF WAS INERT FOR A WHILE, WHICH IS A SECOND LESSON.**
+  `.pre-commit-config.yaml` is versioned but git does not read it — git runs
+  `.git/hooks/pre-commit`, which `pre-commit install` creates **per clone**. So
+  the config was committed, the hook appeared to exist, and the rule was broken
+  again on the very next pattern (subclass sandbox, straight onto `main`).
+  **A guard that is not installed is not a guard.**
+
+  `pre-commit install` once per clone, and verify it fires rather than assuming:
+  on `main`, `git commit --allow-empty -m x` must be REFUSED with exit 1.
 - Signed commits. Commit messages say **why**, in the prose this repo already
   uses; the diff says what.
 - `gh` lives at `~/.local/bin/gh` if it is not on `PATH`.
