@@ -38,12 +38,6 @@ follow the book's structure.
 | [Subclass Sandbox](./patterns/behavioral/subclass_sandbox/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/subclass-sandbox.html) |
 | [Type Object](./patterns/behavioral/type_object/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/type-object.html) |
 
-| Pattern | Status | Reference |
-|---|---|---|
-| Bytecode | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/bytecode.html) |
-| Subclass Sandbox | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/subclass-sandbox.html) |
-| Type Object | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/type-object.html) |
-
 ### Decoupling Patterns — `patterns/decoupling/`
 
 | Pattern | Status | Reference |
@@ -52,17 +46,11 @@ follow the book's structure.
 | [Event Queue](./patterns/decoupling/event_queue/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/event-queue.html) |
 | [Service Locator](./patterns/decoupling/service_locator/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/service-locator.html) |
 
-| Pattern | Status | Reference |
-|---|---|---|
-| Component | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/component.html) |
-| Event Queue | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/event-queue.html) |
-| Service Locator | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/service-locator.html) |
-
 ### Optimization Patterns — `patterns/optimization/`
 
 | Pattern | Status | Reference |
 |---|---|---|
-| Data Locality | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/data-locality.html) |
+| [Data Locality](./patterns/optimization/data_locality/README.md) | ✅ | [chapter](https://gameprogrammingpatterns.com/data-locality.html) |
 | Dirty Flag | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/dirty-flag.html) |
 | Object Pool | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/object-pool.html) |
 | Spatial Partition | 🚧 planned | [chapter](https://gameprogrammingpatterns.com/spatial-partition.html) |
