@@ -19,29 +19,10 @@ date, and rebuild a node only when something actually reads it.
 - `WorldX`/`WorldY` resolve a stale node on the way out — and resolve its **parent
   first**, or the child inherits a stale ancestor.
 
-### ⚠️ The pattern's real danger is not performance
-
-**It is that the flag is easy to forget to set, and the consequence is a SILENT
-WRONG ANSWER.** No crash, no warning — just a stale number, forever. A missed
-`MarkSubtree` would fail nothing loudly here; it would draw a box in the wrong place.
-So the specs pin both halves:
-
-1. **That the deferral is real**, by counting recomputations — a change costs a mark
-   and zero rebuilds; reading a clean node costs nothing; only the *stale* part is
-   redone (change one branch of a ten-node tree, read all ten, and exactly **three**
-   are rebuilt).
-2. **That the cache never lies.** The ground truth is **not** another cached value:
-   the spec walks the parent chain and sums the local offsets by hand, and compares.
-   That is the case that catches a `SetLocal` which forgot to propagate.
-
-⚠️ `WorldX` is deliberately **not `const`**. A read of a deferred value *is* a
-mutation — it brings the cache up to date and counts the work — and a `const` version
-would have to either return a stale value (the exact bug) or mutate through a cast.
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | Space | Move the root — marks all 17 nodes, rebuilds none |
 | C | Move ONE branch — marks **4 of 17** |
 | A | Auto-move on/off |
@@ -53,9 +34,6 @@ would have to either return a stale value (the exact bug) or mutate through a ca
 `STALE BEFORE DRAW 4`, `REBUILT 4`, `READS 98`, `AVOIDED 96 PCT` — one change, four
 nodes rebuilt out of seventeen. Turn auto-move **off** (A) and the scene keeps being
 drawn: `READS` climbs while `REBUILT` stops. That gap is the pattern.
-
-⚠️ **`STALE BEFORE DRAW` is captured before the draw loop**, because *drawing is the
-read that resolves.* Read after, and the number would always be zero.
 
 ## Build, run, test
 

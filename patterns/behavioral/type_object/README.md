@@ -26,24 +26,10 @@ The chapter's two payoffs are both in the code:
 - `PlayState` is presentation: the breed list whose rows show *answered* values, the
   spawned monsters, and a panel that reports how many type objects they use.
 
-### Two rules, both stated where they bite
-
-⚠️ **UNSET IS A SENTINEL, DOCUMENTED AT THE FIELD.** `kUnset` (-1) means "I did not
-say, ask my parent". `CODING.md` tenet 11 prefers exactly this — *"a sentinel
-documented at the field … over a parallel `bool` that can disagree with it"* — and
-health and attack are never legitimately negative, so there is no ambiguity. A
-breed with nothing set anywhere answers **0**, which is documented and pinned by a
-spec rather than left to chance.
-
-⚠️ **A MONSTER HOLDS A REFERENCE, SO THE BREED MUST OUTLIVE IT.** That is why the
-bestiary is a set of static objects and not something a caller builds on the stack.
-A monster holds only what is its own — its id and its health — which is the
-shared-versus-per-instance split the pattern asks for.
-
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | 1 – 3 | Select a breed |
 | Space | Spawn a monster of the selected breed |
 | D / H | Damage / heal **every** spawned monster |

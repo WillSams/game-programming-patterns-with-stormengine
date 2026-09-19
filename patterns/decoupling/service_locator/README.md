@@ -6,26 +6,12 @@
 it**, and without that provider being threaded through every constructor between
 here and the code that actually wants it.
 
-⚠️ **THE CHAPTER IS EXPLICITLY UNSURE ABOUT THIS ONE, AND SO IS THIS README.** The
-book calls it "one of the most misunderstood" of its patterns: the locator is a
-**global**, so it *hides* dependencies rather than declaring them — a class that
-calls `ServiceLocator::Audio()` looks like it needs nothing, and the only way to
-learn otherwise is to read it. The chapter recommends **dependency injection** where
-that choice exists, and this repo takes that seriously: the other demos here pass
-their dependencies as constructor arguments.
-
-The honest reading is that it is what you reach for when a global really is what you
-have (an audio device, a platform service) and threading it through forty
-constructors would be worse — **and even then, the null service and a way to
-unregister are what keep it from becoming a hazard.** Both are pinned by spec here
-rather than left as advice.
-
 ## How it works
 
 Three parts, one file each:
 
 | Part | Where |
-|---|---|
+| --- | --- |
 | **The service** — the interface the game talks to | `src/services/service.h` |
 | **The null service** — "do nothing", so no caller checks for null | same file |
 | **The locator** — the global access point | `src/services/serviceLocator.h` |
@@ -52,7 +38,7 @@ is safe after `main` returns**.
 ## Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | P | Call `PlaySound("goal")` |
 | M | Call `PlayMusic("arena")` |
 | X | Call `StopAll()` |
